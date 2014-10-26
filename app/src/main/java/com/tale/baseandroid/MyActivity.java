@@ -1,9 +1,18 @@
 package com.tale.baseandroid;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.tale.baseandroid.util.AnimationUtil;
+
+import java.util.concurrent.TimeUnit;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 
 public class MyActivity extends ActionBarActivity {
@@ -12,6 +21,24 @@ public class MyActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
+
+        final View tvHelloWorld = findViewById(R.id.tvHelloWorld);
+
+//        ObservableHelper.preDraw(tvHelloWorld).subscribe(new Action1<View>() {
+//            @Override
+//            public void call(View view) {
+//                AnimationUtil.animEnterBottom(view, 5000).start();
+//            }
+//        });
+        Observable.timer(1, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Long>() {
+                    @Override
+                    public void call(Long aLong) {
+                        AnimationUtil.animEnterBottom(tvHelloWorld, 5000).start();
+                    }
+                });
+
     }
 
 
